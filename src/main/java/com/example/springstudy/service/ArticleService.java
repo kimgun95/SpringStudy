@@ -66,8 +66,6 @@ public class ArticleService {
   public StatusResponse deleteArticle(Long articleId, String password) {
     try {
       Article article = articleRepository.getReferenceById(articleId);
-      System.out.println(article.getPassword());
-      System.out.println(password);
       if (article.getPassword().equals(password)) {
         articleRepository.deleteById(article.getId());
         articleRepository.flush();
