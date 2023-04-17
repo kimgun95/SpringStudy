@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,23 +44,23 @@ public class ArticleService {
     return ArticleDto.from(savedArticle);
   }
 
-  public ArticleDto updateArticle(Long articleId, Article article) {
-    Article getArticle = null;
+  public Optional<ArticleDto> updateArticle(Long articleId, Article article) {
     try {
-      getArticle = articleRepository.getReferenceById(articleId);
+      Article getArticle = articleRepository.getReferenceById(articleId);
 
       if (article.getPassword().equals(getArticle.getPassword())) {
         if (article.getTitle() != null) { getArticle.setTitle(article.getTitle()); }
         if (article.getContent() != null) { getArticle.setContent(article.getContent()); }
         if (article.getAuthor() != null) { getArticle.setAuthor(article.getAuthor()); }
         articleRepository.flush();
+        return Optional.of(ArticleDto.from(getArticle));
       } else {
         throw new EntityNotFoundException("비밀번호가 틀렸습니다.");
       }
     } catch (EntityNotFoundException e) {
       log.warn("게시글 업데이트 실패 - {}", e.getLocalizedMessage());
     }
-    return ArticleDto.from(getArticle);
+    return Optional.empty();
   }
 
   public StatusResponse deleteArticle(Long articleId, String password) {
