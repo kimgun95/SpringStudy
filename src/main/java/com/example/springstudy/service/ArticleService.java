@@ -64,11 +64,11 @@ public class ArticleService {
     return Optional.empty();
   }
 
-  public StatusResponse deleteArticle(Long articleId, String password) {
+  public StatusResponse deleteArticle(Long articleId, Article article) {
     try {
-      Article article = articleRepository.getReferenceById(articleId);
-      if (article.getPassword().equals(password)) {
-        articleRepository.deleteById(article.getId());
+      Article getArticle = articleRepository.getReferenceById(articleId);
+      if (getArticle.getPassword().equals(article.getPassword())) {
+        articleRepository.deleteById(getArticle.getId());
         articleRepository.flush();
         return StatusResponse.SUCCESS;
       } else {

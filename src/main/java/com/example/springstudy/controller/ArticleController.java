@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,10 +44,10 @@ public class ArticleController {
   @DeleteMapping ("/article/{articleId}")
   public ResponseEntity<Map<String, Boolean>> deleteArticle(
       @PathVariable Long articleId,
-      @RequestBody HashMap<String, String> password
+      @RequestBody ArticleRequest articleRequest
   ) {
     return ResponseEntity.ok(
-        Map.of("success", articleService.deleteArticle(articleId, password.get("password")).getSuccess())
+        Map.of("success", articleService.deleteArticle(articleId, ArticleRequest.toEntity(articleRequest)).getSuccess())
     );
   }
 
