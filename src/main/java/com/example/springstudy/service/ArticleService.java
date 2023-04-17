@@ -74,7 +74,7 @@ public class ArticleService {
       } else {
         log.warn("게시글 삭제 실패, 비밀번호가 틀렸습니다.");
       }
-    } catch (Exception e) {
+    } catch (EntityNotFoundException e) {
       log.warn("게시글 삭제 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
     }
     return StatusResponse.FAIL;
