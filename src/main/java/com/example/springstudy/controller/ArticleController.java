@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -34,7 +33,7 @@ public class ArticleController {
   }
 
   @PutMapping("/article/{articleId}")
-  public ResponseEntity<Optional<ArticleDto>> updateArticle(
+  public ResponseEntity<ArticleDto> updateArticle(
       @PathVariable Long articleId,
       @RequestBody ArticleRequest articleRequest)
   {
