@@ -6,6 +6,7 @@ import com.example.springstudy.dto.ArticleDto;
 import com.example.springstudy.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.PropertyValueException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,9 @@ public class ArticleService {
   }
 
   public ArticleDto saveArticle(Article article) {
-    Article savedArticle = articleRepository.save(article);
-    return ArticleDto.from(savedArticle);
+    if (article.getTitle() == null || article.getContent() == null || article.getAuthor() == null || article.getPassword() == null)
+      throw new IllegalArgumentException("게시글 작성 실패, null 값을 받고 있습니다.");
+    return ArticleDto.from(articleRepository.save(article));
   }
 
   public Optional<ArticleDto> updateArticle(Long articleId, Article article) {

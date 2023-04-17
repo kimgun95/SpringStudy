@@ -16,11 +16,15 @@ public class Article extends Timestamped {
   private Long id;
 
   @Setter
+  @Column(nullable = false)
   private String title;
   @Setter
+  @Column(nullable = false)
   private String content;
   @Setter
+  @Column(nullable = false)
   private String author;
+  @Column(nullable = false)
   private String password;
 
   private Article(String title, String content, String author, String password) {
