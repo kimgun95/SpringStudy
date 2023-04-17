@@ -57,10 +57,10 @@ public class ArticleService {
         articleRepository.flush();
         return Optional.of(ArticleDto.from(getArticle));
       } else {
-        throw new EntityNotFoundException("비밀번호가 틀렸습니다.");
+        log.warn("게시글 업데이트 실패, 비밀번호가 틀렸습니다.");
       }
     } catch (EntityNotFoundException e) {
-      log.warn("게시글 업데이트 실패 - {}", e.getLocalizedMessage());
+      log.warn("게시글 업데이트 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
     }
     return Optional.empty();
   }
@@ -73,10 +73,10 @@ public class ArticleService {
         articleRepository.flush();
         return StatusResponse.SUCCESS;
       } else {
-        throw new Exception("비밀번호가 틀렸습니다.");
+        log.warn("게시글 삭제 실패, 비밀번호가 틀렸습니다.");
       }
     } catch (Exception e) {
-      log.warn("게시글 삭제 실패 - {}", e.getLocalizedMessage());
+      log.warn("게시글 삭제 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
     }
     return StatusResponse.FAIL;
   }
