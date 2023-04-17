@@ -1,8 +1,8 @@
 package com.example.springstudy.service;
 
 import com.example.springstudy.domain.Article;
-import com.example.springstudy.domain.constant.StatusResponse;
 import com.example.springstudy.dto.ArticleDto;
+import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,14 +70,14 @@ public class ArticleService {
       if (getArticle.getPassword().equals(article.getPassword())) {
         articleRepository.deleteById(getArticle.getId());
         articleRepository.flush();
-        return StatusResponse.SUCCESS;
+        return new StatusResponse(true);
       } else {
         log.warn("게시글 삭제 실패, 비밀번호가 틀렸습니다.");
       }
     } catch (EntityNotFoundException e) {
       log.warn("게시글 삭제 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
     }
-    return StatusResponse.FAIL;
+    return new StatusResponse(false);
   }
 
 }

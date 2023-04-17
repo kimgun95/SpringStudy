@@ -2,13 +2,13 @@ package com.example.springstudy.controller;
 
 import com.example.springstudy.dto.ArticleDto;
 import com.example.springstudy.dto.request.ArticleRequest;
+import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -42,13 +42,11 @@ public class ArticleController {
   }
 
   @DeleteMapping ("/article/{articleId}")
-  public ResponseEntity<Map<String, Boolean>> deleteArticle(
+  public ResponseEntity<StatusResponse> deleteArticle(
       @PathVariable Long articleId,
       @RequestBody ArticleRequest articleRequest
   ) {
-    return ResponseEntity.ok(
-        Map.of("success", articleService.deleteArticle(articleId, ArticleRequest.toEntity(articleRequest)).getSuccess())
-    );
+    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleRequest.toEntity(articleRequest)));
   }
 
 }
