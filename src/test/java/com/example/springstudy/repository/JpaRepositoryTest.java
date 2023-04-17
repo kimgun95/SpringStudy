@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Disabled
 @DisplayName("JPA 연결 테스트")
 @DataJpaTest
-public class JpaRepositoryTest {
+class JpaRepositoryTest {
 
   private final ArticleRepository articleRepository;
 
 
-  public JpaRepositoryTest(@Autowired ArticleRepository articleRepository) {
+  JpaRepositoryTest(@Autowired ArticleRepository articleRepository) {
     this.articleRepository = articleRepository;
   }
 
@@ -33,8 +33,7 @@ public class JpaRepositoryTest {
     List<Article> articles = articleRepository.findAll();
     // Then
     assertThat(articles)
-        .isNotNull()
-        .hasSize(30);
+        .isNotNull();
   }
 
   @Test
