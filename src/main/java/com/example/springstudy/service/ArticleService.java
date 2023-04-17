@@ -72,11 +72,12 @@ public class ArticleService {
         return new StatusResponse(true);
       } else {
         log.warn("게시글 삭제 실패, 비밀번호가 틀렸습니다.");
+        return new StatusResponse(false);
       }
     } catch (EntityNotFoundException e) {
       log.warn("게시글 삭제 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
+      throw new EntityNotFoundException();
     }
-    return new StatusResponse(false);
   }
 
 }
