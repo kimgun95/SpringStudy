@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api")
 @RestController
 public class ArticleController {
 
   private final ArticleService articleService;
 
-  @GetMapping("/articles")
+  @GetMapping("/article")
   public ResponseEntity<List<ArticleDto>> getArticleList() {
     return ResponseEntity.ok(articleService.searchArticles());
   }
