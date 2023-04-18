@@ -32,19 +32,19 @@ public class ArticleService {
   }
 
   @Transactional(readOnly = true)
-  public ArticleDto searchArticle(Long articleId) {
+  public ArticleDto searchArticle(final Long articleId) {
     return articleRepository.findById(articleId)
         .map(ArticleDto::from)
         .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
 
-  public ArticleDto saveArticle(Article article) {
+  public ArticleDto saveArticle(final Article article) {
     if (article.getTitle() == null || article.getContent() == null || article.getAuthor() == null || article.getPassword() == null)
       throw new IllegalArgumentException("게시글 작성 실패, null 값을 받고 있습니다.");
     return ArticleDto.from(articleRepository.save(article));
   }
 
-  public ArticleDto updateArticle(Long articleId, Article article) {
+  public ArticleDto updateArticle(final Long articleId, final Article article) {
     try {
       Article getArticle = articleRepository.getReferenceById(articleId);
 
@@ -63,7 +63,7 @@ public class ArticleService {
     }
   }
 
-  public StatusResponse deleteArticle(Long articleId, Article article) {
+  public StatusResponse deleteArticle(final Long articleId, final Article article) {
     try {
       Article getArticle = articleRepository.getReferenceById(articleId);
       if (getArticle.getPassword().equals(article.getPassword())) {
