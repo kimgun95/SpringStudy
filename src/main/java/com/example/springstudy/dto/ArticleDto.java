@@ -12,23 +12,24 @@ public class ArticleDto {
   private String title;
   private String content;
   private String username;
-  private String password;
 
-  public static ArticleDto from (ArticleRequest entity) {
+  private ArticleDto(String title, String content) {
+    this.title = title;
+    this.content = content;
+  }
+
+    public static ArticleDto from (ArticleRequest entity) {
     return new ArticleDto(
         entity.getTitle(),
-        entity.getContent(),
-        entity.getUsername(),
-        entity.getPassword()
+        entity.getContent()
     );
   }
 
-  public static Article toEntity (ArticleDto articleDto) {
+  public static Article toEntity (ArticleDto articleDto, String username) {
     return Article.of(
         articleDto.getTitle(),
         articleDto.getContent(),
-        articleDto.getUsername(),
-        articleDto.getPassword()
+        username
     );
   }
 

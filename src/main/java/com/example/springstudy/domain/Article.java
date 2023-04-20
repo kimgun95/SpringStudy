@@ -21,19 +21,16 @@ public class Article extends Timestamped {
   @Setter
   @Column(nullable = false)
   private String content;
-  @Setter
+
   @Column(nullable = false)
   private String username;
-  @Column(nullable = false)
-  private String password;
 
-  private Article(String title, String content, String username, String password) {
+  private Article(String title, String content, String username) {
     this.title = title;
     this.content = content;
     this.username = username;
-    this.password = password;
   }
-  public static Article of(String title, String content, String username, String password) {
-    return new Article(title, content, username, password);
+  public static Article of(String title, String content, String username) {
+    return new Article(title, content, username);
   }
 }

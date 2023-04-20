@@ -8,15 +8,11 @@ public class ArticleRequest {
 
   private String title;
   private String content;
-  private String username;
-  private String password;
 
-  public static Article toEntity(ArticleRequest articleRequest) {
-    return Article.of(
-        articleRequest.getTitle(),
-        articleRequest.getContent(),
-        articleRequest.getUsername(),
-        articleRequest.getPassword()
-    );
-  }
+//  public static Article toEntity(ArticleRequest articleRequest) {
+//    return Article.of(
+//        articleRequest.getTitle(),
+//        articleRequest.getContent()
+//    );
+//  }
 }
