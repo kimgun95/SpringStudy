@@ -1,32 +1,35 @@
 package com.example.springstudy.dto;
 
-
 import com.example.springstudy.domain.Article;
+import com.example.springstudy.dto.request.ArticleRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 public class ArticleDto {
 
-  private Long id;
-
   private String title;
   private String content;
-  private String author;
-  private LocalDateTime createdAt;
-  private LocalDateTime modifiedAt;
+  private String username;
+  private String password;
 
-  public static ArticleDto from(Article entity) {
+  public static ArticleDto from (ArticleRequest entity) {
     return new ArticleDto(
-        entity.getId(),
         entity.getTitle(),
         entity.getContent(),
-        entity.getAuthor(),
-        entity.getCreatedAt(),
-        entity.getModifiedAt()
+        entity.getUsername(),
+        entity.getPassword()
     );
   }
+
+  public static Article toEntity (ArticleDto articleDto) {
+    return Article.of(
+        articleDto.getTitle(),
+        articleDto.getContent(),
+        articleDto.getUsername(),
+        articleDto.getPassword()
+    );
+  }
+
 }
