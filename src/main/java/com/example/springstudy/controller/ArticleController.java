@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,24 +29,24 @@ public class ArticleController {
   }
 
   @PostMapping("/article")
-  public ResponseEntity<ArticleResponse> saveArticle(@RequestBody ArticleRequest articleRequest) {
-    return ResponseEntity.ok(articleService.saveArticle(ArticleDto.from(articleRequest)));
+  public ResponseEntity<ArticleResponse> saveArticle(@RequestBody ArticleRequest articleRequest, HttpServletRequest request) {
+    return ResponseEntity.ok(articleService.saveArticle(ArticleDto.from(articleRequest), request));
   }
-
-  @PutMapping("/article/{articleId}")
-  public ResponseEntity<ArticleResponse> updateArticle(
-      @PathVariable Long articleId,
-      @RequestBody ArticleRequest articleRequest)
-  {
-    return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest)));
-  }
-
-  @DeleteMapping ("/article/{articleId}")
-  public ResponseEntity<StatusResponse> deleteArticle(
-      @PathVariable Long articleId,
-      @RequestBody ArticleRequest articleRequest
-  ) {
-    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleDto.from(articleRequest)));
-  }
+//
+//  @PutMapping("/article/{articleId}")
+//  public ResponseEntity<ArticleResponse> updateArticle(
+//      @PathVariable Long articleId,
+//      @RequestBody ArticleRequest articleRequest)
+//  {
+//    return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest)));
+//  }
+//
+//  @DeleteMapping ("/article/{articleId}")
+//  public ResponseEntity<StatusResponse> deleteArticle(
+//      @PathVariable Long articleId,
+//      @RequestBody ArticleRequest articleRequest
+//  ) {
+//    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleDto.from(articleRequest)));
+//  }
 
 }
