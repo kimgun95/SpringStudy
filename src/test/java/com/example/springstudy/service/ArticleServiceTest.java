@@ -1,6 +1,6 @@
 package com.example.springstudy.service;
 
-import com.example.springstudy.dto.ArticleDto;
+import com.example.springstudy.dto.response.ArticleResponse;
 import com.example.springstudy.repository.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class ArticleServiceTest {
     // Given
     given(sut.searchArticles()).willReturn(List.of());
     // When
-    List<ArticleDto> articles = sut.searchArticles();
+    List<ArticleResponse> articles = sut.searchArticles();
     // Then
     assertThat(articles).isEmpty();
   }

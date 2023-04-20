@@ -2,6 +2,7 @@ package com.example.springstudy.controller;
 
 import com.example.springstudy.dto.ArticleDto;
 import com.example.springstudy.dto.request.ArticleRequest;
+import com.example.springstudy.dto.response.ArticleResponse;
 import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -17,26 +18,26 @@ public class ArticleController {
   private final ArticleService articleService;
 
   @GetMapping("/article")
-  public ResponseEntity<List<ArticleDto>> getArticleList() {
+  public ResponseEntity<List<ArticleResponse>> getArticleList() {
     return ResponseEntity.ok(articleService.searchArticles());
   }
 
   @GetMapping("/article/{articleId}")
-  public ResponseEntity<ArticleDto> getArticle(@PathVariable Long articleId) {
+  public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
     return ResponseEntity.ok(articleService.searchArticle(articleId));
   }
 
   @PostMapping("/article")
-  public ResponseEntity<ArticleDto> saveArticle(@RequestBody ArticleRequest articleRequest) {
-    return ResponseEntity.ok(articleService.saveArticle(ArticleRequest.toEntity(articleRequest)));
+  public ResponseEntity<ArticleResponse> saveArticle(@RequestBody ArticleRequest articleRequest) {
+    return ResponseEntity.ok(articleService.saveArticle(ArticleDto.from(articleRequest)));
   }
 
   @PutMapping("/article/{articleId}")
-  public ResponseEntity<ArticleDto> updateArticle(
+  public ResponseEntity<ArticleResponse> updateArticle(
       @PathVariable Long articleId,
       @RequestBody ArticleRequest articleRequest)
   {
-    return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleRequest.toEntity(articleRequest)));
+    return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest)));
   }
 
   @DeleteMapping ("/article/{articleId}")
@@ -44,7 +45,7 @@ public class ArticleController {
       @PathVariable Long articleId,
       @RequestBody ArticleRequest articleRequest
   ) {
-    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleRequest.toEntity(articleRequest)));
+    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleDto.from(articleRequest)));
   }
 
 }
