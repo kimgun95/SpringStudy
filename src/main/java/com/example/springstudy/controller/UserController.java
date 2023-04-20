@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +27,7 @@ public class UserController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<UserAccountResponse> signup(@RequestBody UserAccountRequest userAccountRequest) {
+  public ResponseEntity<UserAccountResponse> signup(@RequestBody @Valid UserAccountRequest userAccountRequest) {
     return ResponseEntity.ok(userService.signup(UserAccountRequest.toEntity(userAccountRequest)));
   }
 
