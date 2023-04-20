@@ -22,7 +22,7 @@ public class ArticleResponse {
         entity.getId(),
         entity.getTitle(),
         entity.getContent(),
-        entity.getUsername(),
+        entity.getUserAccount().getUsername(),
         entity.getCreatedAt(),
         entity.getModifiedAt()
     );

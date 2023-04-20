@@ -13,6 +13,7 @@ public class Article extends Timestamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ARTICLE_ID")
   private Long id;
 
   @Setter
@@ -22,15 +23,16 @@ public class Article extends Timestamped {
   @Column(nullable = false)
   private String content;
 
-  @Column(nullable = false)
-  private String username;
+  @JoinColumn(name = "USER_ID")
+  @ManyToOne
+  private UserAccount userAccount;
 
-  private Article(String title, String content, String username) {
+  private Article(String title, String content, UserAccount userAccount) {
     this.title = title;
     this.content = content;
-    this.username = username;
+    this.userAccount = userAccount;
   }
-  public static Article of(String title, String content, String username) {
-    return new Article(title, content, username);
+  public static Article of(String title, String content, UserAccount userAccount) {
+    return new Article(title, content, userAccount);
   }
 }
