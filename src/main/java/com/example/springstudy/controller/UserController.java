@@ -18,9 +18,16 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping("/login")
-  public ResponseEntity<UserAccountResponse> login(@RequestBody UserAccountRequest userAccountRequest, HttpServletResponse response) {
+  public ResponseEntity<UserAccountResponse> login(
+      @RequestBody UserAccountRequest userAccountRequest,
+      HttpServletResponse response
+  ) {
     return ResponseEntity.ok(userService.login(UserAccountRequest.toEntity(userAccountRequest), response));
   }
 
+  @PostMapping("/signup")
+  public ResponseEntity<UserAccountResponse> signup(@RequestBody UserAccountRequest userAccountRequest) {
+    return ResponseEntity.ok(userService.signup(UserAccountRequest.toEntity(userAccountRequest)));
+  }
 
 }
