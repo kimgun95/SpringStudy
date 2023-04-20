@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
@@ -12,9 +14,19 @@ import javax.persistence.Id;
 public class UserAccount extends Timestamped{
 
   @Id
-  private Long userId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
+  private String username;
   private String password;
 
+  private UserAccount(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
+
+  public static UserAccount of(String username, String password) {
+    return new UserAccount(username, password);
+  }
 
 }
