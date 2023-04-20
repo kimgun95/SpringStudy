@@ -29,3 +29,5 @@ insert into article (title, content, author, password, created_at, modified_at) 
 insert into article (title, content, author, password, created_at, modified_at) values ('Big Fella', 'libero convallis eget eleifend luctus ultricies eu nibh quisque id justo sit amet sapien dignissim vestibulum vestibulum ante ipsum primis', 'Ellesworthe', 'MoHkC1NE3', '2023-01-24 17:11:36', '2022-08-18 02:21:12');
 insert into article (title, content, author, password, created_at, modified_at) values ('A Year Along the Abandoned Road', 'nec dui luctus rutrum nulla tellus in sagittis dui vel nisl duis ac nibh fusce lacus', 'Karleman', 'T30o48E', '2023-03-21 19:31:14', '2022-08-16 17:49:39');
 insert into article (title, content, author, password, created_at, modified_at) values ('Traffic (Trafic)', 'justo sit amet sapien dignissim vestibulum vestibulum ante ipsum primis in', 'Isakovic', 'LOc1zV', '2023-03-28 03:28:18', '2022-05-11 17:28:27');
+
+insert into user_account (username, password, created_at, modified_at) values ('asd123', 'asd123', '2023-03-28 03:28:18', '2022-05-11 17:28:27');
