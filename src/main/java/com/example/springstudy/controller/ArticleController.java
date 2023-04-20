@@ -44,13 +44,13 @@ public class ArticleController {
   ) {
     return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest), request));
   }
-//
-//  @DeleteMapping ("/article/{articleId}")
-//  public ResponseEntity<StatusResponse> deleteArticle(
-//      @PathVariable Long articleId,
-//      @RequestBody ArticleRequest articleRequest
-//  ) {
-//    return ResponseEntity.ok(articleService.deleteArticle(articleId, ArticleDto.from(articleRequest)));
-//  }
+
+  @DeleteMapping ("/article/{articleId}")
+  public ResponseEntity<StatusResponse> deleteArticle(
+      @PathVariable Long articleId,
+      HttpServletRequest request
+  ) {
+    return ResponseEntity.ok(articleService.deleteArticle(articleId, request));
+  }
 
 }

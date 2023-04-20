@@ -11,6 +11,7 @@ import com.example.springstudy.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,22 +99,31 @@ public class ArticleService {
     }
     throw new IllegalArgumentException("토큰이 null 입니다.");
   }
-//
-//  public StatusResponse deleteArticle(final Long articleId, final ArticleDto articleDto) {
-//    try {
-//      Article getArticle = articleRepository.getReferenceById(articleId);
-//      if (getArticle.getPassword().equals(articleDto.getPassword())) {
-//        articleRepository.deleteById(getArticle.getId());
-//        articleRepository.flush();
-//        return new StatusResponse(true);
-//      } else {
-//        log.warn("게시글 삭제 실패, 비밀번호가 틀렸습니다.");
-//        throw new SecurityException();
-//      }
-//    } catch (EntityNotFoundException e) {
-//      log.warn("게시글 삭제 실패, 해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
-//      throw new EntityNotFoundException();
-//    }
-//  }
+
+  public StatusResponse deleteArticle(final Long articleId, final HttpServletRequest request) {
+    final String token = jwtUtil.resolveToken(request);
+
+    if (token != null) {
+      if (jwtUtil.validateToken(token)) {
+        final Claims claims = jwtUtil.getUserInfoFromToken(token);
+
+        final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+            () -> new EntityNotFoundException("사용자가 존재하지 않습니다.")
+        );
+
+        try {
+          final Article getArticle = articleRepository.getReferenceById(articleId);
+          articleRepository.deleteById(getArticle.getId());
+          articleRepository.flush();
+          return new StatusResponse("게시글 삭제 성공", 200);
+
+        } catch (EntityNotFoundException | EmptyResultDataAccessException e) {
+          log.warn("해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
+          throw new EntityNotFoundException();
+        }
+      }
+    }
+    throw new IllegalArgumentException("토큰이 null 입니다.");
+  }
 
 }
