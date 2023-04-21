@@ -1,6 +1,5 @@
 package com.example.springstudy.dto.request;
 
-import com.example.springstudy.domain.Article;
 import lombok.Getter;
 
 @Getter

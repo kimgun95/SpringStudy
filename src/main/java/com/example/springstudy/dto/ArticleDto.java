@@ -5,6 +5,7 @@ import com.example.springstudy.domain.UserAccount;
 import com.example.springstudy.dto.request.ArticleRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
@@ -12,6 +13,7 @@ public class ArticleDto {
 
   private String title;
   private String content;
+  @Setter
   private UserAccount userAccount;
 
   private ArticleDto(String title, String content) {
@@ -26,11 +28,11 @@ public class ArticleDto {
     );
   }
 
-  public static Article toEntity (ArticleDto articleDto, UserAccount userAccount) {
+  public static Article toEntity (ArticleDto articleDto) {
     return Article.of(
         articleDto.getTitle(),
         articleDto.getContent(),
-        userAccount
+        articleDto.getUserAccount()
     );
   }
 

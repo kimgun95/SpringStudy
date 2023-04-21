@@ -62,7 +62,8 @@ public class ArticleService {
         if (articleDto.getTitle() == null || articleDto.getContent() == null)
           throw new IllegalArgumentException("게시글 작성 실패, null 값을 받고 있습니다.");
 
-        final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto, user));
+        articleDto.setUserAccount(user);
+        final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto));
 
         return ArticleResponse.from(article);
       }
