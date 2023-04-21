@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -26,6 +28,10 @@ public class Article extends Timestamped {
   @JoinColumn(name = "USER_ID")
   @ManyToOne
   private UserAccount userAccount;
+
+  @OrderBy("createdAt DESC")
+  @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+  private final List<ArticleComment> articleComments = new ArrayList<>();
 
   private Article(String title, String content, UserAccount userAccount) {
     this.title = title;
