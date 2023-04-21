@@ -2,6 +2,7 @@ package com.example.springstudy.service;
 
 import com.example.springstudy.domain.Article;
 import com.example.springstudy.domain.UserAccount;
+import com.example.springstudy.domain.constant.UserAccountRole;
 import com.example.springstudy.dto.ArticleDto;
 import com.example.springstudy.dto.response.ArticleResponse;
 import com.example.springstudy.dto.response.StatusResponse;
@@ -82,14 +83,16 @@ public class ArticleService {
 
         try {
           final Article getArticle = articleRepository.getReferenceById(articleId);
-          if (articleDto.getTitle() != null) {
-            getArticle.setTitle(articleDto.getTitle());
+          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(claims.getSubject())) {
+            if (articleDto.getTitle() != null) {
+              getArticle.setTitle(articleDto.getTitle());
+            }
+            if (articleDto.getContent() != null) {
+              getArticle.setContent(articleDto.getContent());
+            }
+            articleRepository.flush();
+            return ArticleResponse.from(getArticle);
           }
-          if (articleDto.getContent() != null) {
-            getArticle.setContent(articleDto.getContent());
-          }
-          articleRepository.flush();
-          return ArticleResponse.from(getArticle);
 
         } catch (EntityNotFoundException e) {
           log.warn("해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
@@ -97,7 +100,7 @@ public class ArticleService {
         }
       }
     }
-    throw new IllegalArgumentException("토큰이 null 입니다.");
+    throw new IllegalArgumentException("권한이 없습니다.");
   }
 
   public StatusResponse deleteArticle(final Long articleId, final HttpServletRequest request) {
@@ -113,9 +116,11 @@ public class ArticleService {
 
         try {
           final Article getArticle = articleRepository.getReferenceById(articleId);
-          articleRepository.deleteById(getArticle.getId());
-          articleRepository.flush();
-          return new StatusResponse("게시글 삭제 성공", 200);
+          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(claims.getSubject())) {
+            articleRepository.deleteById(getArticle.getId());
+            articleRepository.flush();
+            return new StatusResponse("게시글 삭제 성공", 200);
+          }
 
         } catch (EntityNotFoundException | EmptyResultDataAccessException e) {
           log.warn("해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
@@ -123,7 +128,7 @@ public class ArticleService {
         }
       }
     }
-    throw new IllegalArgumentException("토큰이 null 입니다.");
+    throw new IllegalArgumentException("권한이 없습니다.");
   }
 
 }
