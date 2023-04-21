@@ -1,6 +1,7 @@
 package com.example.springstudy.service;
 
 import com.example.springstudy.domain.UserAccount;
+import com.example.springstudy.domain.constant.UserAccountRole;
 import com.example.springstudy.dto.response.UserAccountResponse;
 import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.UserRepository;
@@ -34,7 +35,8 @@ public class UserService {
     if (!getUser.getPassword().equals(password))
       throw new SecurityException("비밀번호가 일치하지 않습니다.");
 
-    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(getUser.getUsername()));
+    response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(getUser.getUsername(), getUser.getRole()));
+
     return new UserAccountResponse("회원가입 성공", 200);
   }
 
@@ -46,6 +48,8 @@ public class UserService {
 
     if (userRepository.findByUsername(username).isPresent())
       throw new EntityExistsException("중복된 사용자가 존재합니다.");
+
+    userAccount.setRole(UserAccountRole.USER);
 
     userRepository.save(userAccount);
     return new UserAccountResponse("회원가입 성공", 200);
