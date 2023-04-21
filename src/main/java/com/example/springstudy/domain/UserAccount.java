@@ -1,7 +1,9 @@
 package com.example.springstudy.domain;
 
+import com.example.springstudy.domain.constant.UserAccountRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -17,6 +19,11 @@ public class UserAccount extends Timestamped{
 
   private String username;
   private String password;
+
+  @Setter
+  @Column(nullable = false)
+  @Enumerated(value = EnumType.STRING)
+  private UserAccountRole role;
 
   private UserAccount(String username, String password) {
     this.username = username;
