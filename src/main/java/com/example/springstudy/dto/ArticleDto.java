@@ -21,7 +21,7 @@ public class ArticleDto {
     this.content = content;
   }
 
-    public static ArticleDto from (ArticleRequest entity) {
+  public static ArticleDto from (ArticleRequest entity) {
     return new ArticleDto(
         entity.getTitle(),
         entity.getContent()
