@@ -3,7 +3,6 @@ package com.example.springstudy.dto.response;
 import com.example.springstudy.domain.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class ArticleResponse {
   private String title;
   private String content;
   private String username;
-  @Setter
   private List<ArticleCommentResponse> articleComments = new ArrayList<>();
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
