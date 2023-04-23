@@ -36,7 +36,6 @@ public class JwtUtil {
     key = Keys.hmacShaKeyFor(bytes);
   }
 
-  // header 토큰을 가져오기
   public String resolveToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
     //StringUtils.hasText : 해당 문자열이 공백(null)인지 확인
@@ -61,7 +60,6 @@ public class JwtUtil {
             .compact();
   }
 
-  // 토큰 검증
   public boolean validateToken(String token) {
     try {
       //1. JwtParseBuilder 인스턴스 생성
@@ -85,7 +83,6 @@ public class JwtUtil {
     return false;
   }
 
-  // 토큰에서 사용자 정보 가져오기
   public Claims getUserInfoFromToken(String token) {
     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
   }
