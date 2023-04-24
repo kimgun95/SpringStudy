@@ -59,9 +59,6 @@ public class ArticleService {
             () -> new EntityNotFoundException("사용자가 존재하지 않습니다.")
         );
 
-        if (articleDto.getTitle() == null || articleDto.getContent() == null)
-          throw new IllegalArgumentException("게시글 작성 실패, null 값을 받고 있습니다.");
-
         articleDto.setUserAccount(user);
         final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto));
 
@@ -85,12 +82,7 @@ public class ArticleService {
         try {
           final Article getArticle = articleRepository.getReferenceById(articleId);
           if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
-            if (articleDto.getTitle() != null) {
-              getArticle.setTitle(articleDto.getTitle());
-            }
-            if (articleDto.getContent() != null) {
-              getArticle.setContent(articleDto.getContent());
-            }
+            getArticle.setContent(articleDto.getContent());
             articleRepository.flush();
             return ArticleResponse.from(getArticle);
           }
