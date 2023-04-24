@@ -75,7 +75,7 @@ public class ArticleCommentService {
           final Article article = articleRepository.findById(articleComment.getArticle().getId()).orElseThrow(
               () -> new EntityNotFoundException("게시글이 존재하지 않습니다.")
           );
-          if (user.getRole() == UserAccountRole.ADMIN || articleComment.getUserAccount().getUsername().equals(claims.getSubject())) {
+          if (user.getRole() == UserAccountRole.ADMIN || articleComment.getUserAccount().getUsername().equals(user.getUsername())) {
             if (articleCommentDto.getContent() != null) {
               articleComment.setContent(articleCommentDto.getContent());
             }
@@ -108,7 +108,7 @@ public class ArticleCommentService {
           final Article article = articleRepository.findById(articleComment.getArticle().getId()).orElseThrow(
               () -> new EntityNotFoundException("게시글이 존재하지 않습니다.")
           );
-          if (user.getRole() == UserAccountRole.ADMIN || articleComment.getUserAccount().getUsername().equals(claims.getSubject())) {
+          if (user.getRole() == UserAccountRole.ADMIN || articleComment.getUserAccount().getUsername().equals(user.getUsername())) {
             articleCommentRepository.deleteById(commentId);
             articleCommentRepository.flush();
             return new StatusResponse("댓글 삭제 성공", 200);

@@ -84,7 +84,7 @@ public class ArticleService {
 
         try {
           final Article getArticle = articleRepository.getReferenceById(articleId);
-          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(claims.getSubject())) {
+          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
             if (articleDto.getTitle() != null) {
               getArticle.setTitle(articleDto.getTitle());
             }
@@ -117,7 +117,7 @@ public class ArticleService {
 
         try {
           final Article getArticle = articleRepository.getReferenceById(articleId);
-          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(claims.getSubject())) {
+          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
             articleRepository.deleteById(getArticle.getId());
             articleRepository.flush();
             return new StatusResponse("게시글 삭제 성공", 200);
