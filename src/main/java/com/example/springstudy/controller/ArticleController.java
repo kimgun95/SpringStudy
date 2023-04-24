@@ -40,7 +40,7 @@ public class ArticleController {
   @PutMapping("/article/{articleId}")
   public ResponseEntity<ArticleResponse> updateArticle(
       @PathVariable Long articleId,
-      @RequestBody ArticleRequest articleRequest,
+      @RequestBody @Valid ArticleRequest articleRequest,
       HttpServletRequest request
   ) {
     return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest), request));

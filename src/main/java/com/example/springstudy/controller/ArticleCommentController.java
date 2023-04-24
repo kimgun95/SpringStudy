@@ -29,7 +29,7 @@ public class ArticleCommentController {
   @PutMapping("/comments/{commentId}")
   public ResponseEntity<ArticleCommentResponse> updateComment(
       @PathVariable Long commentId,
-      @RequestBody ArticleCommentRequest articleCommentRequest,
+      @RequestBody @Valid ArticleCommentRequest articleCommentRequest,
       HttpServletRequest request
   ) {
     return ResponseEntity.ok(articleCommentService.updateComment(commentId, ArticleCommentDto.from(articleCommentRequest), request));
