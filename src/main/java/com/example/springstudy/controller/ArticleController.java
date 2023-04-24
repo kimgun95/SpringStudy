@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class ArticleController {
 
   @PostMapping("/article")
   public ResponseEntity<ArticleResponse> saveArticle(
-      @RequestBody ArticleRequest articleRequest,
+      @RequestBody @Valid ArticleRequest articleRequest,
       HttpServletRequest request
   ) {
     return ResponseEntity.ok(articleService.saveArticle(ArticleDto.from(articleRequest), request));

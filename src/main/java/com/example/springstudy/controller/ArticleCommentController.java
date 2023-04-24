@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,7 +20,7 @@ public class ArticleCommentController {
 
   @PostMapping("/comments")
   public ResponseEntity<ArticleCommentResponse> saveComment(
-      @RequestBody ArticleCommentRequest articleCommentRequest,
+      @RequestBody @Valid ArticleCommentRequest articleCommentRequest,
       HttpServletRequest request
   ) {
     return ResponseEntity.ok(articleCommentService.saveComment(ArticleCommentDto.from(articleCommentRequest), request));
