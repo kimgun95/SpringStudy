@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class ArticleCommentService {
 
@@ -32,6 +32,7 @@ public class ArticleCommentService {
   private final ArticleRepository articleRepository;
   private final JwtUtil jwtUtil;
 
+  @Transactional
   public ArticleCommentResponse saveComment(final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
@@ -56,6 +57,7 @@ public class ArticleCommentService {
     throw new IllegalArgumentException("토큰이 null 입니다.");
   }
 
+  @Transactional
   public ArticleCommentResponse updateComment(final Long commentId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
@@ -87,6 +89,7 @@ public class ArticleCommentService {
     throw new IllegalArgumentException("권한이 없습니다.");
   }
 
+  @Transactional
   public StatusResponse deleteComment(final Long commentId, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 

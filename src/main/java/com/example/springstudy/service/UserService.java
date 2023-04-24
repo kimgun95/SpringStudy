@@ -14,14 +14,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class UserService {
 
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
 
-  @Transactional(readOnly = true)
   public UserAccountResponse login(final UserAccount userAccount, HttpServletResponse response) {
     final String username = userAccount.getUsername();
     final String password = userAccount.getPassword();
@@ -38,6 +37,7 @@ public class UserService {
     return new UserAccountResponse("로그인 성공", 200);
   }
 
+  @Transactional
   public UserAccountResponse signup(final UserAccount userAccount) {
     final String username = userAccount.getUsername();
     final String password = userAccount.getPassword();

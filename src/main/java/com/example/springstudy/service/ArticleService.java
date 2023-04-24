@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class ArticleService {
 
@@ -32,7 +32,6 @@ public class ArticleService {
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
 
-  @Transactional(readOnly = true)
   public List<ArticleResponse> searchArticles() {
     return articleRepository.findAll()
         .stream()
@@ -41,13 +40,13 @@ public class ArticleService {
         .collect(Collectors.toList());
   }
 
-  @Transactional(readOnly = true)
   public ArticleResponse searchArticle(final Long articleId) {
     return articleRepository.findById(articleId)
         .map(ArticleResponse::from)
         .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
 
+  @Transactional
   public ArticleResponse saveArticle(final ArticleDto articleDto, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
@@ -68,6 +67,7 @@ public class ArticleService {
     throw new IllegalArgumentException("토큰이 null 입니다.");
   }
 
+  @Transactional
   public ArticleResponse updateArticle(final Long articleId, final ArticleDto articleDto, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
@@ -96,6 +96,7 @@ public class ArticleService {
     throw new IllegalArgumentException("권한이 없습니다.");
   }
 
+  @Transactional
   public StatusResponse deleteArticle(final Long articleId, final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
