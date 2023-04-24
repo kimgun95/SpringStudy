@@ -46,9 +46,6 @@ public class ArticleCommentService {
             () -> new EntityNotFoundException("게시글이 존재하지 않습니다.")
         );
 
-        if (articleCommentDto.getContent() == null)
-          throw new IllegalArgumentException("게시글 작성 실패, null 값을 받고 있습니다.");
-
         articleCommentDto.setUserAccount(user);
         articleCommentDto.setArticle(article);
         final ArticleComment articleComment = articleCommentRepository.saveAndFlush(ArticleCommentDto.toEntity(articleCommentDto));
@@ -76,9 +73,7 @@ public class ArticleCommentService {
               () -> new EntityNotFoundException("게시글이 존재하지 않습니다.")
           );
           if (user.getRole() == UserAccountRole.ADMIN || articleComment.getUserAccount().getUsername().equals(user.getUsername())) {
-            if (articleCommentDto.getContent() != null) {
-              articleComment.setContent(articleCommentDto.getContent());
-            }
+            articleComment.setContent(articleCommentDto.getContent());
             articleCommentRepository.flush();
             return ArticleCommentResponse.from(articleComment);
           }
