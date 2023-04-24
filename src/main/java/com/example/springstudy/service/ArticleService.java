@@ -6,12 +6,13 @@ import com.example.springstudy.domain.constant.UserAccountRole;
 import com.example.springstudy.dto.ArticleDto;
 import com.example.springstudy.dto.response.ArticleResponse;
 import com.example.springstudy.dto.response.StatusResponse;
+import com.example.springstudy.exception.ArticleErrorResult;
+import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.ArticleRepository;
 import com.example.springstudy.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -48,56 +48,51 @@ public class ArticleService {
 
   @Transactional
   public ArticleResponse saveArticle(final ArticleDto articleDto, final HttpServletRequest request) {
-    final String token = jwtUtil.resolveToken(request);
+    final UserAccount user = getUserAccount(request);
 
-    if (token != null) {
-      if (jwtUtil.validateToken(token)) {
-        final Claims claims = jwtUtil.getUserInfoFromToken(token);
+    articleDto.setUserAccount(user);
+    final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto));
 
-        final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-            () -> new EntityNotFoundException("사용자가 존재하지 않습니다.")
-        );
-
-        articleDto.setUserAccount(user);
-        final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto));
-
-        return ArticleResponse.from(article);
-      }
-    }
-    throw new IllegalArgumentException("토큰이 null 입니다.");
+    return ArticleResponse.from(article);
   }
 
   @Transactional
   public ArticleResponse updateArticle(final Long articleId, final ArticleDto articleDto, final HttpServletRequest request) {
-    final String token = jwtUtil.resolveToken(request);
+    final UserAccount user = getUserAccount(request);
+    try {
+      final Article getArticle = articleRepository.getReferenceById(articleId);
 
-    if (token != null) {
-      if (jwtUtil.validateToken(token)) {
-        final Claims claims = jwtUtil.getUserInfoFromToken(token);
-
-        final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-            () -> new EntityNotFoundException("사용자가 존재하지 않습니다.")
-        );
-
-        try {
-          final Article getArticle = articleRepository.getReferenceById(articleId);
-          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
-            getArticle.setContent(articleDto.getContent());
-            articleRepository.flush();
-            return ArticleResponse.from(getArticle);
-          }
-
-        } catch (EntityNotFoundException e) {
-          log.warn("해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
-          throw new EntityNotFoundException();
-        }
+      if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
+        getArticle.setContent(articleDto.getContent());
+        articleRepository.flush();
+        return ArticleResponse.from(getArticle);
       }
+
+    } catch (EntityNotFoundException e) {
+      throw new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND);
     }
-    throw new IllegalArgumentException("권한이 없습니다.");
+    throw new ArticleException(ArticleErrorResult.NOT_ARTICLE_OWNER);
   }
 
   @Transactional
   public StatusResponse deleteArticle(final Long articleId, final HttpServletRequest request) {
+    final UserAccount user = getUserAccount(request);
+    try {
+      final Article getArticle = articleRepository.getReferenceById(articleId);
+
+      if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
+        articleRepository.deleteById(getArticle.getId());
+        articleRepository.flush();
+        return new StatusResponse("게시글 삭제 성공", 200);
+      }
+
+    } catch (EntityNotFoundException | EmptyResultDataAccessException e) {
+      throw new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND);
+    }
+    throw new ArticleException(ArticleErrorResult.NOT_ARTICLE_OWNER);
+  }
+
+  UserAccount getUserAccount(final HttpServletRequest request) {
     final String token = jwtUtil.resolveToken(request);
 
     if (token != null) {
@@ -105,24 +100,13 @@ public class ArticleService {
         final Claims claims = jwtUtil.getUserInfoFromToken(token);
 
         final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-            () -> new EntityNotFoundException("사용자가 존재하지 않습니다.")
+            () -> new ArticleException(ArticleErrorResult.USER_NOT_FOUND)
         );
 
-        try {
-          final Article getArticle = articleRepository.getReferenceById(articleId);
-          if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
-            articleRepository.deleteById(getArticle.getId());
-            articleRepository.flush();
-            return new StatusResponse("게시글 삭제 성공", 200);
-          }
-
-        } catch (EntityNotFoundException | EmptyResultDataAccessException e) {
-          log.warn("해당 게시글이 존재하지 않습니다. - {}", e.getLocalizedMessage());
-          throw new EntityNotFoundException();
-        }
+        return user;
       }
     }
-    throw new IllegalArgumentException("권한이 없습니다.");
+    throw new ArticleException(ArticleErrorResult.INVALID_TOKEN);
   }
 
 }

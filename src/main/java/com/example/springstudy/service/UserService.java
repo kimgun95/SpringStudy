@@ -3,14 +3,14 @@ package com.example.springstudy.service;
 import com.example.springstudy.domain.UserAccount;
 import com.example.springstudy.domain.constant.UserAccountRole;
 import com.example.springstudy.dto.response.UserAccountResponse;
+import com.example.springstudy.exception.ArticleErrorResult;
+import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
@@ -26,11 +26,11 @@ public class UserService {
     final String password = userAccount.getPassword();
 
     final UserAccount getUser = userRepository.findByUsername(username).orElseThrow(
-        () -> new EntityNotFoundException("등록된 사용자가 없습니다.")
+        () -> new ArticleException(ArticleErrorResult.USER_NOT_FOUND)
     );
 
     if (!getUser.getPassword().equals(password))
-      throw new SecurityException("비밀번호가 일치하지 않습니다.");
+      throw new ArticleException(ArticleErrorResult.USER_NOT_FOUND);
 
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(getUser.getUsername(), getUser.getRole()));
 
@@ -43,7 +43,7 @@ public class UserService {
     final String password = userAccount.getPassword();
 
     if (userRepository.findByUsername(username).isPresent())
-      throw new EntityExistsException("중복된 사용자가 존재합니다.");
+      throw new ArticleException(ArticleErrorResult.DUPLICATED_USER_REGISTER);
 
     userAccount.setRole(UserAccountRole.USER);
 
