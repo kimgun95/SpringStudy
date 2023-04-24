@@ -20,7 +20,7 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<UserAccountResponse> login(
-      @RequestBody UserAccountRequest userAccountRequest,
+      @RequestBody @Valid UserAccountRequest userAccountRequest,
       HttpServletResponse response
   ) {
     return ResponseEntity.ok(userService.login(UserAccountRequest.toEntity(userAccountRequest), response));
