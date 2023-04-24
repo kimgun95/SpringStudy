@@ -25,8 +25,6 @@ public class UserService {
   public UserAccountResponse login(final UserAccount userAccount, HttpServletResponse response) {
     final String username = userAccount.getUsername();
     final String password = userAccount.getPassword();
-    if (username == null || password == null)
-      throw new IllegalArgumentException("로그인 실패, null 값을 받고 있습니다.");
 
     final UserAccount getUser = userRepository.findByUsername(username).orElseThrow(
         () -> new EntityNotFoundException("등록된 사용자가 없습니다.")
@@ -37,14 +35,12 @@ public class UserService {
 
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(getUser.getUsername(), getUser.getRole()));
 
-    return new UserAccountResponse("회원가입 성공", 200);
+    return new UserAccountResponse("로그인 성공", 200);
   }
 
   public UserAccountResponse signup(final UserAccount userAccount) {
     final String username = userAccount.getUsername();
     final String password = userAccount.getPassword();
-    if (username == null || password == null)
-      throw new IllegalArgumentException("로그인 실패, null 값을 받고 있습니다.");
 
     if (userRepository.findByUsername(username).isPresent())
       throw new EntityExistsException("중복된 사용자가 존재합니다.");
