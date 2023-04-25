@@ -33,10 +33,10 @@ public class ArticleCommentService {
   private final JwtUtil jwtUtil;
 
   @Transactional
-  public ArticleCommentResponse saveComment(final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
+  public ArticleCommentResponse saveComment(final Long articleId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
     final UserAccount user = getUserAccount(request);
 
-    final Article article = articleRepository.findById(articleCommentDto.getArticleId()).orElseThrow(
+    final Article article = articleRepository.findById(articleId).orElseThrow(
         () -> new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND)
     );
 
@@ -48,12 +48,12 @@ public class ArticleCommentService {
   }
 
   @Transactional
-  public ArticleCommentResponse updateComment(final Long commentId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
+  public ArticleCommentResponse updateComment(final Long articleId, final Long commentId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
     final UserAccount user = getUserAccount(request);
 
     try {
       final ArticleComment articleComment = articleCommentRepository.getReferenceById(commentId);
-      final Article article = articleRepository.findById(articleComment.getArticle().getId()).orElseThrow(
+      final Article article = articleRepository.findById(articleId).orElseThrow(
           () -> new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND)
       );
 
@@ -71,12 +71,12 @@ public class ArticleCommentService {
   }
 
   @Transactional
-  public StatusResponse deleteComment(final Long commentId, final HttpServletRequest request) {
+  public StatusResponse deleteComment(final Long articleId, final Long commentId, final HttpServletRequest request) {
     final UserAccount user = getUserAccount(request);
 
     try {
       final ArticleComment articleComment = articleCommentRepository.getReferenceById(commentId);
-      final Article article = articleRepository.findById(articleComment.getArticle().getId()).orElseThrow(
+      final Article article = articleRepository.findById(articleId).orElseThrow(
           () -> new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND)
       );
 

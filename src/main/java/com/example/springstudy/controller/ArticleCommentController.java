@@ -18,28 +18,31 @@ public class ArticleCommentController {
 
   private final ArticleCommentService articleCommentService;
 
-  @PostMapping("/comments")
+  @PostMapping("/articles/{articleId}/comments")
   public ResponseEntity<ArticleCommentResponse> saveComment(
+      @PathVariable Long articleId,
       @RequestBody @Valid ArticleCommentRequest articleCommentRequest,
       HttpServletRequest request
   ) {
-    return ResponseEntity.ok(articleCommentService.saveComment(ArticleCommentDto.from(articleCommentRequest), request));
+    return ResponseEntity.ok(articleCommentService.saveComment(articleId, ArticleCommentDto.from(articleCommentRequest), request));
   }
 
-  @PutMapping("/comments/{commentId}")
+  @PutMapping("/articles/{articleId}/comments/{commentId}")
   public ResponseEntity<ArticleCommentResponse> updateComment(
+      @PathVariable Long articleId,
       @PathVariable Long commentId,
       @RequestBody @Valid ArticleCommentRequest articleCommentRequest,
       HttpServletRequest request
   ) {
-    return ResponseEntity.ok(articleCommentService.updateComment(commentId, ArticleCommentDto.from(articleCommentRequest), request));
+    return ResponseEntity.ok(articleCommentService.updateComment(articleId, commentId, ArticleCommentDto.from(articleCommentRequest), request));
   }
 
-  @DeleteMapping ("/comments/{commentId}")
+  @DeleteMapping ("/articles/{articleId}/comments/{commentId}")
   public ResponseEntity<StatusResponse> deleteComment(
+      @PathVariable Long articleId,
       @PathVariable Long commentId,
       HttpServletRequest request
   ) {
-    return ResponseEntity.ok(articleCommentService.deleteComment(commentId, request));
+    return ResponseEntity.ok(articleCommentService.deleteComment(articleId, commentId, request));
   }
 }

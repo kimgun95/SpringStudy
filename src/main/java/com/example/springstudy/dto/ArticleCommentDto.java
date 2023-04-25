@@ -12,21 +12,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ArticleCommentDto {
 
-  private Long articleId;
   private String content;
   @Setter
   private Article article;
   @Setter
   private UserAccount userAccount;
 
-  private ArticleCommentDto(Long articleId, String content) {
-    this.articleId = articleId;
+  private ArticleCommentDto(String content) {
     this.content = content;
   }
 
   public static ArticleCommentDto from (ArticleCommentRequest entity) {
     return new ArticleCommentDto(
-        entity.getArticleId(),
         entity.getContent()
     );
   }
