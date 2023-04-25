@@ -19,17 +19,17 @@ public class ArticleController {
 
   private final ArticleService articleService;
 
-  @GetMapping("/article")
+  @GetMapping("/articles")
   public ResponseEntity<List<ArticleResponse>> getArticleList() {
     return ResponseEntity.ok(articleService.searchArticles());
   }
 
-  @GetMapping("/article/{articleId}")
+  @GetMapping("/articles/{articleId}")
   public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
     return ResponseEntity.ok(articleService.searchArticle(articleId));
   }
 
-  @PostMapping("/article")
+  @PostMapping("/articles")
   public ResponseEntity<ArticleResponse> saveArticle(
       @RequestBody @Valid ArticleRequest articleRequest,
       HttpServletRequest request
@@ -37,7 +37,7 @@ public class ArticleController {
     return ResponseEntity.ok(articleService.saveArticle(ArticleDto.from(articleRequest), request));
   }
 
-  @PutMapping("/article/{articleId}")
+  @PutMapping("/articles/{articleId}")
   public ResponseEntity<ArticleResponse> updateArticle(
       @PathVariable Long articleId,
       @RequestBody @Valid ArticleRequest articleRequest,
@@ -46,7 +46,7 @@ public class ArticleController {
     return ResponseEntity.ok(articleService.updateArticle(articleId, ArticleDto.from(articleRequest), request));
   }
 
-  @DeleteMapping ("/article/{articleId}")
+  @DeleteMapping ("/articles/{articleId}")
   public ResponseEntity<StatusResponse> deleteArticle(
       @PathVariable Long articleId,
       HttpServletRequest request
