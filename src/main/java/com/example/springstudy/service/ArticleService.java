@@ -31,7 +31,7 @@ public class ArticleService {
   private final JwtUtil jwtUtil;
 
   public List<ArticleResponse> searchArticles() {
-    return articleRepository.findAll()
+    return articleRepository.findAllJoinFetch()
         .stream()
         .map(ArticleResponse::from)
         .sorted(Comparator.comparing(ArticleResponse::getCreatedAt).reversed())
