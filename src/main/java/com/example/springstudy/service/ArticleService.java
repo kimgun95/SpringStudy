@@ -11,14 +11,12 @@ import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.ArticleRepository;
 import com.example.springstudy.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,9 +45,7 @@ public class ArticleService {
   }
 
   @Transactional
-  public ArticleResponse saveArticle(final ArticleDto articleDto, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
-
+  public ArticleResponse saveArticle(final UserAccount user, final ArticleDto articleDto) {
     articleDto.setUserAccount(user);
     final Article article = articleRepository.saveAndFlush(ArticleDto.toEntity(articleDto));
 
@@ -57,12 +53,12 @@ public class ArticleService {
   }
 
   @Transactional
-  public ArticleResponse updateArticle(final Long articleId, final ArticleDto articleDto, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
+  public ArticleResponse updateArticle(final UserAccount user, final Long articleId, final ArticleDto articleDto) {
     try {
       final Article getArticle = articleRepository.getReferenceById(articleId);
 
       if (user.getRole() == UserAccountRole.ADMIN || getArticle.getUserAccount().getUsername().equals(user.getUsername())) {
+        getArticle.setTitle(articleDto.getTitle());
         getArticle.setContent(articleDto.getContent());
         articleRepository.flush();
         return ArticleResponse.from(getArticle);
@@ -75,8 +71,7 @@ public class ArticleService {
   }
 
   @Transactional
-  public StatusResponse deleteArticle(final Long articleId, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
+  public StatusResponse deleteArticle(final UserAccount user, final Long articleId) {
     try {
       final Article getArticle = articleRepository.getReferenceById(articleId);
 
@@ -90,23 +85,6 @@ public class ArticleService {
       throw new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND);
     }
     throw new ArticleException(ArticleErrorResult.NOT_ARTICLE_OWNER);
-  }
-
-  UserAccount getUserAccount(final HttpServletRequest request) {
-    final String token = jwtUtil.resolveToken(request);
-
-    if (token != null) {
-      if (jwtUtil.validateToken(token)) {
-        final Claims claims = jwtUtil.getUserInfoFromToken(token);
-
-        final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-            () -> new ArticleException(ArticleErrorResult.USER_NOT_FOUND)
-        );
-
-        return user;
-      }
-    }
-    throw new ArticleException(ArticleErrorResult.INVALID_TOKEN);
   }
 
 }

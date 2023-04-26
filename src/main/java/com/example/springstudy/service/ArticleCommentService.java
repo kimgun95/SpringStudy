@@ -13,14 +13,12 @@ import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.ArticleCommentRepository;
 import com.example.springstudy.repository.ArticleRepository;
 import com.example.springstudy.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -33,9 +31,7 @@ public class ArticleCommentService {
   private final JwtUtil jwtUtil;
 
   @Transactional
-  public ArticleCommentResponse saveComment(final Long articleId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
-
+  public ArticleCommentResponse saveComment(final UserAccount user, final Long articleId, final ArticleCommentDto articleCommentDto) {
     final Article article = articleRepository.findById(articleId).orElseThrow(
         () -> new ArticleException(ArticleErrorResult.ARTICLE_NOT_FOUND)
     );
@@ -48,9 +44,7 @@ public class ArticleCommentService {
   }
 
   @Transactional
-  public ArticleCommentResponse updateComment(final Long articleId, final Long commentId, final ArticleCommentDto articleCommentDto, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
-
+  public ArticleCommentResponse updateComment(final UserAccount user, final Long articleId, final Long commentId, final ArticleCommentDto articleCommentDto) {
     try {
       final ArticleComment articleComment = articleCommentRepository.getReferenceById(commentId);
       final Article article = articleRepository.findById(articleId).orElseThrow(
@@ -71,9 +65,7 @@ public class ArticleCommentService {
   }
 
   @Transactional
-  public StatusResponse deleteComment(final Long articleId, final Long commentId, final HttpServletRequest request) {
-    final UserAccount user = getUserAccount(request);
-
+  public StatusResponse deleteComment(final UserAccount user, final Long articleId, final Long commentId) {
     try {
       final ArticleComment articleComment = articleCommentRepository.getReferenceById(commentId);
       final Article article = articleRepository.findById(articleId).orElseThrow(
@@ -91,23 +83,6 @@ public class ArticleCommentService {
     }
 
     throw new ArticleException(ArticleErrorResult.NOT_ARTICLE_OWNER);
-  }
-
-  UserAccount getUserAccount(final HttpServletRequest request) {
-    final String token = jwtUtil.resolveToken(request);
-
-    if (token != null) {
-      if (jwtUtil.validateToken(token)) {
-        final Claims claims = jwtUtil.getUserInfoFromToken(token);
-
-        final UserAccount user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-            () -> new ArticleException(ArticleErrorResult.USER_NOT_FOUND)
-        );
-
-        return user;
-      }
-    }
-    throw new ArticleException(ArticleErrorResult.INVALID_TOKEN);
   }
 
 }
