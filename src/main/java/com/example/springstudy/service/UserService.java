@@ -8,6 +8,7 @@ import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
+  private final PasswordEncoder passwordEncoder;
 
   public UserAccountResponse login(final UserAccount userAccount, HttpServletResponse response) {
     final String username = userAccount.getUsername();
@@ -29,7 +31,7 @@ public class UserService {
         () -> new ArticleException(ArticleErrorResult.USER_NOT_FOUND)
     );
 
-    if (!getUser.getPassword().equals(password))
+    if (!passwordEncoder.matches(password, getUser.getPassword()))
       throw new ArticleException(ArticleErrorResult.USER_NOT_FOUND);
 
     response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(getUser.getUsername(), getUser.getRole()));
@@ -40,11 +42,12 @@ public class UserService {
   @Transactional
   public UserAccountResponse signup(final UserAccount userAccount) {
     final String username = userAccount.getUsername();
-    final String password = userAccount.getPassword();
+    final String password = passwordEncoder.encode(userAccount.getPassword());
 
     if (userRepository.findByUsername(username).isPresent())
       throw new ArticleException(ArticleErrorResult.DUPLICATED_USER_REGISTER);
 
+    userAccount.setPassword(password);
     userAccount.setRole(UserAccountRole.USER);
 
     userRepository.save(userAccount);
