@@ -1,11 +1,15 @@
 package com.example.springstudy.jwt;
 
 import com.example.springstudy.domain.constant.UserAccountRole;
+import com.example.springstudy.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,6 +33,7 @@ public class JwtUtil {
   private String secretKey;
   private Key key;
   private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+  private final UserDetailsServiceImpl userDetailsService;
 
   @PostConstruct
   public void init() {
@@ -85,6 +90,12 @@ public class JwtUtil {
 
   public Claims getUserInfoFromToken(String token) {
     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+  }
+
+  //인증 객체를 생성, 사실 JwtAuthFilter에서 바로 처리할 수 있는 코드인데 이렇게 분리한 이유는 책임을 분리하기 위함이다.
+  public Authentication createAuthentication(String username) {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
 
 }
