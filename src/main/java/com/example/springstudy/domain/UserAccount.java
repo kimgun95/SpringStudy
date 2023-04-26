@@ -18,6 +18,7 @@ public class UserAccount extends Timestamped{
   private Long id;
 
   private String username;
+  @Setter
   private String password;
 
   @Setter
