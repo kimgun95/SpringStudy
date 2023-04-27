@@ -93,6 +93,12 @@ public class JwtUtil {
   }
 
   //인증 객체를 생성, 사실 JwtAuthFilter에서 바로 처리할 수 있는 코드인데 이렇게 분리한 이유는 책임을 분리하기 위함이다.
+  //인증 처리 후 인증된 토큰을 AuthenticationManager에게 반환하는 것이 정석이다.
+  //CustomAuthenticationProvider에서 UserDetailsService를 통해 조회한 정보와 입력받은 비밀번호가 일치하는지 확인한다.
+  //DB에 저장된 비밀번호는 암호화가 되어있기에, 입력 비밀번호는 PasswordEncoder를 통해 암호화하여 DB 비밀번호와 매칭한다.
+  //매칭되지 않는다면 BadCredentialsException 처리한다.
+  //하지만 이 모든 얘기는 AuthenticationProvider를 통한 필터 로직이기 때문에 아래 구현과는 상관이 없다.
+  //https://www.toptal.com/spring/spring-security-tutorial 이 글이 코드를 작성하면서 조금의 확신을 갖게 만들었다.
   public Authentication createAuthentication(String username) {
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

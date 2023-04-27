@@ -22,6 +22,8 @@ public class SecurityConfig {
 
   private final JwtUtil jwtUtil;
 
+  //정적 자원들에 대해서는 시큐리티를 적용하지 않는다.
+  //어떤 요청에 대해서는 로그인을 요구하고, 어떤 요청에 대해선 로그인을 요구하지 않을지 설정한다.
   //addFilterBefore() : Custom Filter 등록, 이곳에선 JWT 인증/인가를 위한 필터를 등록한다.
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
