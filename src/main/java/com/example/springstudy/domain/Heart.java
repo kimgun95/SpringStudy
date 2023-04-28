@@ -15,15 +15,15 @@ public class Heart {
   private Long id;
 
   @JoinColumn(name = "USER_ID")
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private UserAccount user;
 
   @JoinColumn(name = "ARTICLE_ID")
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private Article article;
 
   @JoinColumn(name = "ARTICLE_COMMENT_ID")
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private ArticleComment comment;
 
   private Heart(UserAccount userAccount, Article article, ArticleComment articleComment) {

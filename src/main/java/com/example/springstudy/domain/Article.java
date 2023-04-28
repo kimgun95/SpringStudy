@@ -27,7 +27,7 @@ public class Article extends Timestamped {
   private String content;
 
   @JoinColumn(name = "USER_ID")
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private UserAccount userAccount;
 
   @OrderBy("createdAt DESC")
