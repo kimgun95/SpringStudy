@@ -3,6 +3,7 @@ package com.example.springstudy.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public class Article extends Timestamped {
   @OrderBy("createdAt DESC")
   @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
   private final List<ArticleComment> articleComments = new ArrayList<>();
+
+  @Setter
+  @ColumnDefault("0")
+  private int heartCount;
 
   private Article(String title, String content, UserAccount userAccount) {
     this.title = title;

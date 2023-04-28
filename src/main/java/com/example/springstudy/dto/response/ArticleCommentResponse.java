@@ -13,6 +13,7 @@ public class ArticleCommentResponse {
   private Long id;
   private String content;
   private String username;
+  private int heartCount;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
@@ -21,6 +22,7 @@ public class ArticleCommentResponse {
         entity.getId(),
         entity.getContent(),
         entity.getUserAccount().getUsername(),
+        entity.getHeartCount(),
         entity.getCreatedAt(),
         entity.getModifiedAt()
     );

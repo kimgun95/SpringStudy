@@ -17,6 +17,7 @@ public class ArticleResponse {
   private String content;
   private String username;
   private List<ArticleCommentResponse> articleComments = new ArrayList<>();
+  private int heartCount;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
@@ -29,6 +30,7 @@ public class ArticleResponse {
         entity.getArticleComments()
             .stream().map(ArticleCommentResponse::from)
             .toList(),
+        entity.getHeartCount(),
         entity.getCreatedAt(),
         entity.getModifiedAt()
     );
