@@ -11,7 +11,6 @@ import com.example.springstudy.exception.ArticleErrorResult;
 import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.repository.ArticleCommentRepository;
 import com.example.springstudy.repository.ArticleRepository;
-import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import javax.persistence.EntityNotFoundException;
 public class ArticleCommentService {
 
   private final ArticleCommentRepository articleCommentRepository;
-  private final UserRepository userRepository;
   private final ArticleRepository articleRepository;
 
   @Transactional

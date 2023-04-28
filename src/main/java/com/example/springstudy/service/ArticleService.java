@@ -9,7 +9,6 @@ import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.exception.ArticleErrorResult;
 import com.example.springstudy.exception.ArticleException;
 import com.example.springstudy.repository.ArticleRepository;
-import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
   private final ArticleRepository articleRepository;
-  private final UserRepository userRepository;
 
   public List<ArticleResponse> searchArticles() {
     return articleRepository.findAllJoinFetch()
