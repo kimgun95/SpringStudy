@@ -20,14 +20,14 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<UserAccountResponse> login(
-      @RequestBody @Valid UserAccountRequest userAccountRequest,
+      @RequestBody @Valid final UserAccountRequest userAccountRequest,
       HttpServletResponse response
   ) {
     return ResponseEntity.ok(userService.login(UserAccountRequest.toEntity(userAccountRequest), response));
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<UserAccountResponse> signup(@RequestBody @Valid UserAccountRequest userAccountRequest) {
+  public ResponseEntity<UserAccountResponse> signup(@RequestBody @Valid final UserAccountRequest userAccountRequest) {
     return ResponseEntity.ok(userService.signup(UserAccountRequest.toEntity(userAccountRequest)));
   }
 

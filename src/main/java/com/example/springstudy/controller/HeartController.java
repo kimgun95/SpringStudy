@@ -19,17 +19,17 @@ public class HeartController {
 
   @PutMapping("/heart/{articleId}")
   public ResponseEntity<StatusResponse> heartArticle(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId
   ) {
     return ResponseEntity.ok(heartService.heartArticle(userDetails.getUser(), articleId));
   }
 
   @PutMapping("/heart/{articleId}/{commentId}")
   public ResponseEntity<StatusResponse> heartArticleComment(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId,
-      @PathVariable Long commentId
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId,
+      @PathVariable final Long commentId
   ) {
     return ResponseEntity.ok(heartService.heartArticleComment(userDetails.getUser(), articleId, commentId));
   }

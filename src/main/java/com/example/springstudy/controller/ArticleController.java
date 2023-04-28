@@ -26,31 +26,31 @@ public class ArticleController {
   }
 
   @GetMapping("/articles/{articleId}")
-  public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long articleId) {
+  public ResponseEntity<ArticleResponse> getArticle(@PathVariable final Long articleId) {
     return ResponseEntity.ok(articleService.searchArticle(articleId));
   }
 
   @PostMapping("/articles")
   public ResponseEntity<ArticleResponse> saveArticle(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody @Valid ArticleRequest articleRequest
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @RequestBody @Valid final ArticleRequest articleRequest
   ) {
     return ResponseEntity.ok(articleService.saveArticle(userDetails.getUser(), ArticleDto.from(articleRequest)));
   }
 
   @PutMapping("/articles/{articleId}")
   public ResponseEntity<ArticleResponse> updateArticle(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId,
-      @RequestBody @Valid ArticleRequest articleRequest
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId,
+      @RequestBody @Valid final ArticleRequest articleRequest
   ) {
     return ResponseEntity.ok(articleService.updateArticle(userDetails.getUser(), articleId, ArticleDto.from(articleRequest)));
   }
 
   @DeleteMapping ("/articles/{articleId}")
   public ResponseEntity<StatusResponse> deleteArticle(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId
   ) {
     return ResponseEntity.ok(articleService.deleteArticle(userDetails.getUser(), articleId));
   }

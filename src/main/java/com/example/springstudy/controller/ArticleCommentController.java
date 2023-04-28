@@ -21,28 +21,28 @@ public class ArticleCommentController {
 
   @PostMapping("/articles/{articleId}/comments")
   public ResponseEntity<ArticleCommentResponse> saveComment(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId,
-      @RequestBody @Valid ArticleCommentRequest articleCommentRequest
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId,
+      @RequestBody @Valid final ArticleCommentRequest articleCommentRequest
   ) {
     return ResponseEntity.ok(articleCommentService.saveComment(userDetails.getUser(), articleId, ArticleCommentDto.from(articleCommentRequest)));
   }
 
   @PutMapping("/articles/{articleId}/comments/{commentId}")
   public ResponseEntity<ArticleCommentResponse> updateComment(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId,
-      @PathVariable Long commentId,
-      @RequestBody @Valid ArticleCommentRequest articleCommentRequest
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId,
+      @PathVariable final Long commentId,
+      @RequestBody @Valid final ArticleCommentRequest articleCommentRequest
   ) {
     return ResponseEntity.ok(articleCommentService.updateComment(userDetails.getUser(), articleId, commentId, ArticleCommentDto.from(articleCommentRequest)));
   }
 
   @DeleteMapping ("/articles/{articleId}/comments/{commentId}")
   public ResponseEntity<StatusResponse> deleteComment(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable Long articleId,
-      @PathVariable Long commentId
+      @AuthenticationPrincipal final UserDetailsImpl userDetails,
+      @PathVariable final Long articleId,
+      @PathVariable final Long commentId
   ) {
     return ResponseEntity.ok(articleCommentService.deleteComment(userDetails.getUser(), articleId, commentId));
   }
