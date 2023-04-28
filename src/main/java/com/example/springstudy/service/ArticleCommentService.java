@@ -9,7 +9,6 @@ import com.example.springstudy.dto.response.ArticleCommentResponse;
 import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.exception.ArticleErrorResult;
 import com.example.springstudy.exception.ArticleException;
-import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.ArticleCommentRepository;
 import com.example.springstudy.repository.ArticleRepository;
 import com.example.springstudy.repository.UserRepository;
@@ -28,7 +27,6 @@ public class ArticleCommentService {
   private final ArticleCommentRepository articleCommentRepository;
   private final UserRepository userRepository;
   private final ArticleRepository articleRepository;
-  private final JwtUtil jwtUtil;
 
   @Transactional
   public ArticleCommentResponse saveComment(final UserAccount user, final Long articleId, final ArticleCommentDto articleCommentDto) {

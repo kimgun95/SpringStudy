@@ -8,7 +8,6 @@ import com.example.springstudy.dto.response.ArticleResponse;
 import com.example.springstudy.dto.response.StatusResponse;
 import com.example.springstudy.exception.ArticleErrorResult;
 import com.example.springstudy.exception.ArticleException;
-import com.example.springstudy.jwt.JwtUtil;
 import com.example.springstudy.repository.ArticleRepository;
 import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class ArticleService {
 
   private final ArticleRepository articleRepository;
   private final UserRepository userRepository;
-  private final JwtUtil jwtUtil;
 
   public List<ArticleResponse> searchArticles() {
     return articleRepository.findAllJoinFetch()
