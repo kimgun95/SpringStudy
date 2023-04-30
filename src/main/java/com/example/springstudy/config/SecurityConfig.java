@@ -36,6 +36,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(PathRequest.toH2Console()).permitAll()
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+            .antMatchers( "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
             .antMatchers("/login", "/signup").permitAll()
             .antMatchers(HttpMethod.GET, "/articles/**").permitAll()
             .anyRequest().authenticated()
